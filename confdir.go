@@ -15,8 +15,8 @@ import (
 // and returns an array of un-parsed lines read. Any errors are accumulated
 // and returned together as a multierror. This means you can receive conf
 // data and an error in response.
-func ReadConfDir(path string) ([][]byte, error) {
-	var result = make([][]byte, 0)
+func ReadConfDir(path string) ([]string, error) {
+	var result = make([]string, 0)
 	var resultErr error
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
@@ -38,7 +38,7 @@ func ReadConfDir(path string) ([][]byte, error) {
 		defer f.Close()
 		scanner := bufio.NewScanner(f)
 		for scanner.Scan() {
-			result = append(result, scanner.Bytes())
+			result = append(result, scanner.Text())
 		}
 		if err := scanner.Err(); err != nil {
 			resultErr = multierror.Append(resultErr, err)
